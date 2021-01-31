@@ -34,12 +34,13 @@ module.exports = {
   deleteStudent: (db, studentId) => {
     return db.Student.findById({ _id: studentId }, (student) => {
       var studentClasses = student.classes;
-      studentClasses.forEach((className) => {
-        db.Class.findOne({ name: className }, (class_obj) => {
-          var studentIndex = class_obj.indexOf(studentId);
-          class_obj.pop(studentIndex);
+      if (studentClasses.length > 0)
+        studentClasses.forEach((className) => {
+          db.Class.findOne({ name: className }, (class_obj) => {
+            var studentIndex = class_obj.indexOf(studentId);
+            class_obj.pop(studentIndex);
+          });
         });
-      });
     });
   },
 };
