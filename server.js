@@ -19,51 +19,13 @@ mongoose
   .catch((err) => console.error("Connection error", err));
 
 const db = require("./models");
-
-function createNewStudent(student) {
-  return db.Student.create(student);
-}
-
-function deleteStudent(studentId) {
-  return db.Student.findById({ _id: studentId }, (student) => {
-    var studentClasses = student.classes;
-    studentClasses.forEach((className) => {
-      db.Class.findOne({ name: className }, (class_obj) => {
-        var studentIndex = class_obj.indexOf(studentId);
-        class_obj.pop(studentIndex);
-      });
-    });
-  });
-}
-
-function addStudentToClass(classId, studentId) {
-  return db.Class.findByIdAndUpdate(
-    classId,
-    { $push: { students: studentId } },
-    { new: true, useFindAndModify: false }
-  );
-}
-
-function addClassToStudent(studentId, classId) {
-  return db.Student.findByIdAndUpdate(
-    studentId,
-    { $push: { classes: classId } },
-    { new: true, useFindAndModify: false }
-  );
-}
-
-function getAllStudents() {
-  return db.Student.find({});
-}
-
-function getStudent(studentId) {
-  return db.Student.findById(studentId);
-}
+const operation = require("./db/operations");
 
 app.post("/students", (req, res) => {
   console.log(req.body);
   const newStudent = req.body;
-  createNewStudent(newStudent)
+  operation
+    .createNewStudent(newStudent)
     .then(() => {
       res.status(200).json({ message: "New student successfully created" });
     })
@@ -71,19 +33,20 @@ app.post("/students", (req, res) => {
 });
 
 app.get("/students", (req, res) => {
-  getAllStudents().then((allStudents) => {
+  operation.getAllStudents().then((allStudents) => {
     res.status(200).json(allStudents);
   });
 });
 
 app.get("/student/:id", (req, res) => {
-  getStudent(req.params.id).then((student_obj) => {
+  operation.getStudent(db, req.params.id).then((student_obj) => {
     res.status(200).json(student_obj);
   });
 });
 
 app.delete("/student/:id", (req, res) => {
-  deleteStudent(req.params.id)
+  operation
+    .deleteStudent(req.params.id)
     .then(() => {
       res.status(200).json({ message: "Successfully deleted" });
     })
@@ -93,7 +56,25 @@ app.delete("/student/:id", (req, res) => {
 app.post("/addStudentToClass/:classId", (req, res) => {
   var studentId = req.body.studentId;
   var classId = req.params.classId;
-  addStudentToClass(classId, studentId);
+  operation.addStudentToClass(classId, studentId);
+});
+
+app.post("/classes", (req, res) => {
+  const newClass = req.body;
+  operation
+    .createNewClass(newClass)
+    .then(() => {
+      res.status(200).json({ message: "New class successfully created" });
+    })
+    .catch((error) => res.status(401).json({ message: error.toString() }));
+});
+
+app.get("/classes", (req, res) => {
+  operation.getAllClasses(db).then((allClasses) => res.status(200).json(allClasses));
+});
+
+app.get("/class/:id", (req, res) => {
+  operation.getClassName(db, req.params.id).then((class_obj) => res.status(200).json(class_obj));
 });
 
 app.get("/", (req, res) => res.status(200).json({ message: "Hello world" }));
