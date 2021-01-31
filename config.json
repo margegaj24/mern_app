@@ -1,0 +1,3 @@
+{
+  "dbUri": "mongodb+srv://mario:mario@cluster0.j7pav.mongodb.net/taleas_test?retryWrites=true&w=majority"
+}
