@@ -1,80 +1,72 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-//const dbHelper = require("./helpers/db");
 const app = express();
-const fs = require("fs");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-const config = JSON.parse(fs.readFileSync("config.json"));
-
-mongoose
-  .connect(config.dbUri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("Successfully connect to MongoDB."))
-  .catch((err) => console.error("Connection error", err));
-
-const db = require("./models");
-const operation = require("./db/operations");
+const operations = require("./db/operations.js");
 
 app.post("/students", (req, res) => {
-  console.log(req.body);
   const newStudent = req.body;
-  operation
-    .createNewStudent(newStudent)
+  operations.Student.createNewStudent(newStudent)
     .then(() => {
       res.status(200).json({ message: "New student successfully created" });
     })
-    .catch((error) => res.status(401).json({ message: error.toString() }));
+    .catch((error) => res.status(400).json({ message: error.toString() }));
 });
 
 app.get("/students", (req, res) => {
-  operation.getAllStudents().then((allStudents) => {
-    res.status(200).json(allStudents);
-  });
+  operations.Student.getAllStudents()
+    .then((allStudents) => {
+      res.status(200).json(allStudents);
+    })
+    .catch((error) => res.status(400).json({ message: error.toString() }));
 });
 
 app.get("/student/:id", (req, res) => {
-  operation.getStudent(db, req.params.id).then((student_obj) => {
-    res.status(200).json(student_obj);
-  });
+  operations.Student.getStudent(req.params.id)
+    .then((student_obj) => {
+      res.status(200).json(student_obj);
+    })
+    .catch((error) => res.status(400).json({ message: error.toString() }));
 });
 
 app.delete("/student/:id", (req, res) => {
-  operation
-    .deleteStudent(req.params.id)
+  operations.Student.deleteStudent(req.params.id)
     .then(() => {
       res.status(200).json({ message: "Successfully deleted" });
     })
-    .catch((error) => res.status(401).json({ message: error.toString() }));
+    .catch((error) => res.status(400).json({ message: error.toString() }));
 });
 
 app.post("/addStudentToClass/:classId", (req, res) => {
   var studentId = req.body.studentId;
   var classId = req.params.classId;
-  operation.addStudentToClass(classId, studentId);
+  operations.Klase.addStudentToClass(classId, studentId)
+    .then()
+    .catch((error) => res.status(400).json({ message: error.toString() }));
 });
 
 app.post("/classes", (req, res) => {
   const newClass = req.body;
-  operation
-    .createNewClass(newClass)
+  operations.Klase.createNewClass(newClass)
     .then(() => {
       res.status(200).json({ message: "New class successfully created" });
     })
-    .catch((error) => res.status(401).json({ message: error.toString() }));
+    .catch((error) => res.status(400).json({ message: error.toString() }));
 });
 
 app.get("/classes", (req, res) => {
-  operation.getAllClasses(db).then((allClasses) => res.status(200).json(allClasses));
+  operations.Klase.getAllClasses()
+    .then((allClasses) => res.status(200).json(allClasses))
+    .catch((error) => res.status(400).json({ message: error.toString() }));
 });
 
 app.get("/class/:id", (req, res) => {
-  operation.getClassName(db, req.params.id).then((class_obj) => res.status(200).json(class_obj));
+  operations.Klase.getClassName(req.params.id)
+    .then((class_obj) => res.status(200).json(class_obj))
+    .catch((error) => res.status(400).json({ message: error.toString() }));
 });
 
 app.get("/", (req, res) => res.status(200).json({ message: "Hello world" }));

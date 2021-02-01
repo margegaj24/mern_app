@@ -8,6 +8,6 @@ const classSchema = mongoose.Schema({
   students: [{ type: mongoose.Schema.Types.ObjectId, ref: "Student" }],
 });
 
-const Class = mongoose.model("Class", classSchema);
+const Klase = mongoose.model("Klase", classSchema);
 
-module.exports = Class;
+module.exports = Klase;
