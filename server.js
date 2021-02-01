@@ -26,8 +26,8 @@ app.get("/students", (req, res) => {
 
 app.get("/student/:id", (req, res) => {
   operations.Student.getStudent(req.params.id)
-    .then((student_obj) => {
-      res.status(200).json(student_obj);
+    .then((studentObject) => {
+      res.status(200).json(studentObject);
     })
     .catch((error) => res.status(400).json({ message: error.toString() }));
 });
