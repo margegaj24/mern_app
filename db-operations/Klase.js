@@ -1,23 +1,23 @@
 const db = require("../models");
 
 function createNewClass(class_obj) {
-  return db.Class.create(class_obj);
+  return db.Klase.create(class_obj);
 }
 function getClassName(classId) {
-  return db.Class.findById(classId);
+  return db.Klase.findById(classId);
 }
 function getAllClasses() {
-  return db.Class.find({});
+  return db.Klase.find({});
 }
 function addStudentToClass(classId, studentId) {
-  return db.Class.findByIdAndUpdate(
+  return db.Klase.findByIdAndUpdate(
     classId,
     { $push: { students: studentId } },
     { new: true, useFindAndModify: false }
   );
 }
 function deleteClass(classId) {
-  return db.Class.findByIdAndDelete(classId);
+  return db.Klase.findByIdAndDelete(classId);
 }
 
 module.exports = {
