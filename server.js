@@ -1,7 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-
+const cors = require('cors');
+app.use(cors({origin: "*", optionsSuccessStatus: 200}));
+/*app.use(function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});*/
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -14,6 +21,18 @@ app.post("/students", async (req, res) => {
     res.status(200).json({ message: "New student successfully created" });
   } catch (error) {
     res.status(200).json({ error: error });
+  }
+});
+
+app.put("/student/:id", async (req, res) => {
+  try {
+    if (req.body.name !== "") propertyToUpdate = {name: req.body.name}
+    else if (req.body.surname !== "") propertyToUpdate = {surname: req.body.surname}
+    else res.status(400);
+    await operations.Student.updateStudent(req.params.id, propertyToUpdate);
+    res.status(200).json({ message: "Student successfully updated" });
+  } catch (error) {
+    res.status(200).json({ error: error.message });
   }
 });
 

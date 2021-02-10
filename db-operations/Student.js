@@ -16,17 +16,12 @@ function addClassToStudent(studentId, classId) {
     { new: true, useFindAndModify: false }
   );
 }
+function updateStudent(studentId, property){
+  return db.Student.findByIdAndUpdate(studentId, property);
+}
+
 function deleteStudent(studentId) {
-  return db.Student.findById({ _id: studentId }, (student) => {
-    var studentClasses = student.classes;
-    if (studentClasses.length > 0)
-      studentClasses.forEach((className) => {
-        db.Class.findOne({ name: className }, (class_obj) => {
-          var studentIndex = class_obj.indexOf(studentId);
-          class_obj.pop(studentIndex);
-        });
-      });
-  });
+  return db.Student.findByIdAndDelete(studentId);
 }
 
 module.exports = {
@@ -35,4 +30,5 @@ module.exports = {
   createNewStudent,
   addClassToStudent,
   deleteStudent,
+  updateStudent,
 };
