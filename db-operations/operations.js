@@ -5,12 +5,12 @@ mongoose
   .connect(config.dbUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false 
+    useFindAndModify: false,
   })
   .then(() => console.log("Successfully connect to MongoDB."))
   .catch((err) => console.error("Connection error", err));
 
 module.exports = {
-  Klase: require("./Klase"),
+  Course: require("./Course"),
   Student: require("./Student"),
 };

@@ -1,13 +1,14 @@
 var mongoose = require("mongoose");
 
-const classSchema = mongoose.Schema({
+const courseSchema = mongoose.Schema({
   name: {
     type: String,
+    unique: true,
     enum: ["Web Development", "Data structures & Algorithms", "Physics", "Machine Learning"],
   },
   students: [{ type: mongoose.Schema.Types.ObjectId, ref: "Student" }],
 });
 
-const Klase = mongoose.model("Klase", classSchema);
+const Course = mongoose.model("Course", courseSchema);
 
-module.exports = Klase;
+module.exports = Course;

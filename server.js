@@ -1,14 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const cors = require('cors');
-app.use(cors({origin: "*", optionsSuccessStatus: 200}));
-/*app.use(function(req, res, next) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST");
-  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});*/
+const cors = require("cors");
+
+app.use(cors({ origin: "*", optionsSuccessStatus: 200 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -20,14 +15,14 @@ app.post("/students", async (req, res) => {
     await operations.Student.createNewStudent(newStudent);
     res.status(200).json({ message: "New student successfully created" });
   } catch (error) {
-    res.status(200).json({ error: error });
+    res.status(200).json({ error: error.message });
   }
 });
 
 app.put("/student/:id", async (req, res) => {
   try {
-    if (req.body.name !== "") propertyToUpdate = {name: req.body.name}
-    else if (req.body.surname !== "") propertyToUpdate = {surname: req.body.surname}
+    if (req.body.name !== "") propertyToUpdate = { name: req.body.name };
+    else if (req.body.surname !== "") propertyToUpdate = { surname: req.body.surname };
     else res.status(400);
     await operations.Student.updateStudent(req.params.id, propertyToUpdate);
     res.status(200).json({ message: "Student successfully updated" });
@@ -41,7 +36,7 @@ app.get("/students", async (req, res) => {
     var allStudents = await operations.Student.getAllStudents();
     res.status(200).json(allStudents);
   } catch (error) {
-    res.status(200).json({ error: error });
+    res.status(200).json({ error: error.message });
   }
 });
 
@@ -50,7 +45,7 @@ app.get("/student/:id", async (req, res) => {
     var studentObject = await operations.Student.getStudent(req.params.id);
     res.status(200).json(studentObject);
   } catch (error) {
-    res.status(200).json({ error: error });
+    res.status(200).json({ error: error.message });
   }
 });
 
@@ -59,57 +54,57 @@ app.delete("/student/:id", async (req, res) => {
     await operations.Student.deleteStudent(req.params.id);
     res.status(200).json({ message: "Successfully deleted" });
   } catch (error) {
-    res.status(200).json({ error: error });
+    res.status(200).json({ error: error.message });
   }
 });
 
-app.post("/addStudentToKlase", async (req, res) => {
+app.post("/addStudentToCourse", async (req, res) => {
   try {
     var studentId = req.body.studentId;
-    var classId = req.body.classId;
-    await operations.Klase.addStudentToClass(classId, studentId);
-    res.status(200).json({ message: "Successfully added student to klase " + classId });
+    var courseId = req.body.courseId;
+    await operations.Course.addStudentToCourse(courseId, studentId);
+    res.status(200).json({ message: "Successfully added student to course " + courseId });
   } catch (error) {
-    res.status(200).json({ error: error });
+    res.status(200).json({ error: error.message });
   }
 });
 
-app.post("/classes", async (req, res) => {
+app.post("/courses", async (req, res) => {
   try {
-    const newClass = req.body;
-    await operations.Klase.createNewClass(newClass);
-    res.status(200).json({ message: "New class successfully created" });
+    const courseName = req.body;
+    await operations.Course.createNewCourse(courseName);
+    res.status(200).json({ message: "New course successfully created" });
   } catch (error) {
-    res.status(400).json({ error: error });
+    res.status(400).json({ error: error.message });
   }
 });
 
-app.get("/classes", async (req, res) => {
+app.get("/courses", async (req, res) => {
   try {
-    var allClasses = await operations.Klase.getAllClasses();
-    res.status(200).json(allClasses);
+    var allCourses = await operations.Course.getAllCourses();
+    res.status(200).json(allCourses);
   } catch (error) {
-    res.status(400).json({ error: error });
+    res.status(400).json({ error: error.message });
   }
 });
 
-app.get("/class/:id", async (req, res) => {
+app.get("/course/:id", async (req, res) => {
   try {
-    var klase = await operations.Klase.getClassName(req.params.id);
+    var klase = await operations.Course.getCourseName(req.params.id);
     res.status(200).json(klase);
   } catch (error) {
-    res.status(400).json({ error: error });
+    res.status(400).json({ error: error.message });
   }
 });
 
-app.post("/addKlaseToStudent", async (req, res) => {
+app.post("/addCourseToStudent", async (req, res) => {
   try {
     var studentId = req.body.studentId;
-    var classId = req.body.classId;
-    await operations.Student.addClassToStudent(studentId, classId);
-    res.status(200).json({ message: "Successfully added klase to student " + studentId });
+    var courseId = req.body.courseId;
+    await operations.Student.addCourseToStudent(studentId, courseId);
+    res.status(200).json({ message: "Successfully added course to student " + studentId });
   } catch (error) {
-    res.status(200).json({ error: error });
+    res.status(200).json({ error: error.message });
   }
 });
 

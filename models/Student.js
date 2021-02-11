@@ -3,7 +3,7 @@ var mongoose = require("mongoose");
 const studentSchema = mongoose.Schema({
   name: { type: String, minlength: 3, required: [true, "Provide a name"] },
   surname: { type: String, minlength: 3, required: [true, "Provide a surname"] },
-  classes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Class" }],
+  courses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],
 });
 
 const Student = mongoose.model("Student", studentSchema);

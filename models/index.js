@@ -1,4 +1,4 @@
 module.exports = {
-  Klase: require("./Klase"),
+  Course: require("./Course"),
   Student: require("./Student"),
 };
