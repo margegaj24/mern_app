@@ -11,8 +11,10 @@ const operations = require("./db-operations/operations.js");
 
 app.post("/students", async (req, res) => {
   try {
-    const newStudent = req.body;
-    await operations.Student.createNewStudent(newStudent);
+    var newStudent = req.body;
+    var createdStudent = await operations.Student.createNewStudent(newStudent);
+    if (newStudent.courses.length > 0)
+      await operations.Course.addStudentToCourses(newStudent.courses, createdStudent._id)
     res.status(200).json({ message: "New student successfully created" });
   } catch (error) {
     res.status(200).json({ error: error.message });
@@ -52,6 +54,16 @@ app.get("/student/:id", async (req, res) => {
 app.delete("/student/:id", async (req, res) => {
   try {
     await operations.Student.deleteStudent(req.params.id);
+    await operations.Course.deleteStudent(req.params.id);
+    res.status(200).json({ message: "Successfully deleted" });
+  } catch (error) {
+    res.status(200).json({ error: error.message });
+  }
+});
+
+app.delete("/course/:id", async (req, res) => {
+  try {
+    await operations.Course.deleteCourse(req.params.id);
     res.status(200).json({ message: "Successfully deleted" });
   } catch (error) {
     res.status(200).json({ error: error.message });
@@ -84,7 +96,7 @@ app.get("/courses", async (req, res) => {
     var allCourses = await operations.Course.getAllCourses();
     res.status(200).json(allCourses);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(200).json({ error: error.message });
   }
 });
 
@@ -93,7 +105,7 @@ app.get("/course/:id", async (req, res) => {
     var klase = await operations.Course.getCourseName(req.params.id);
     res.status(200).json(klase);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(200).json({ error: error.message });
   }
 });
 

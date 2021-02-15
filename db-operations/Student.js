@@ -1,15 +1,28 @@
 const db = require("../models");
 
 function createNewStudent(student) {
-  return db.Student.create(student);
+  return db.Student.create(student); 
 }
 
 function getStudent(studentId) {
-  return db.Student.findById(studentId);
+  return db.Student.findById(studentId, { name: 1, surname: 1 });
 }
 
 function getAllStudents() {
   return db.Student.find({});
+  //   , (error, documents) => {
+  //   var allStudents = [];
+  //   documents.forEach(document => {
+  //     var student = { id: document.id, name: document.name, surname: document.surname }
+  //     var studentCourses = document.courses;
+  //     if (studentCourses.length > 0) {
+  //       var courseNames = []
+  //       studentCourses.forEach({})
+  //     }
+
+  //     allStudents.push()
+  //   })
+  // });
 }
 
 function addCourseToStudent(studentId, courseId) {
@@ -32,7 +45,7 @@ async function deleteStudent(studentId) {
     });
   //test this await
   if (student.courses.length > 0)
-    student.courses.map((courseId) => await db.Course.updateMany({ _id: courseId }, { $pull: { students: studentId } }));
+    student.courses.map((courseId) => db.Course.updateMany({ _id: courseId }, { $pull: { students: studentId } }));
   return db.Student.findByIdAndDelete(studentId);
 }
 

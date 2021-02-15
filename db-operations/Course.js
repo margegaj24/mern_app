@@ -16,8 +16,18 @@ function addStudentToCourse(courseId, studentId) {
     { new: true, useFindAndModify: false }
   );
 }
+function addStudentToCourses(courseIds, studentId) {
+  return db.Course.updateMany(
+    { _id: {$in: courseIds}},
+    { $addToSet: {students: studentId}}
+  );
+}
 function deleteCourse(courseId) {
   return db.Course.findByIdAndDelete(courseId);
+}
+
+function deleteStudent(studentId) {
+  return db.Course.updateMany({}, {$pull : {students: {$in: [studentId]}}}, { multi: true });
 }
 
 module.exports = {
@@ -26,4 +36,6 @@ module.exports = {
   getAllCourses,
   addStudentToCourse,
   deleteCourse,
+  addStudentToCourses,
+  deleteStudent,
 };
