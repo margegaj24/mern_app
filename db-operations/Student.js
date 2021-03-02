@@ -10,19 +10,6 @@ function getStudent(studentId) {
 
 function getAllStudents() {
   return db.Student.find({});
-  //   , (error, documents) => {
-  //   var allStudents = [];
-  //   documents.forEach(document => {
-  //     var student = { id: document.id, name: document.name, surname: document.surname }
-  //     var studentCourses = document.courses;
-  //     if (studentCourses.length > 0) {
-  //       var courseNames = []
-  //       studentCourses.forEach({})
-  //     }
-
-  //     allStudents.push()
-  //   })
-  // });
 }
 
 function addCourseToStudent(studentId, courseId) {
@@ -38,15 +25,11 @@ function updateStudent(studentId, property) {
 }
 
 async function deleteStudent(studentId) {
-  var student = await db.Student.findById(studentId, { courses: true })
-    .exec()
-    .then((student) => {
-      return student;
-    });
-  //test this await
-  if (student.courses.length > 0)
-    student.courses.map((courseId) => db.Course.updateMany({ _id: courseId }, { $pull: { students: studentId } }));
   return db.Student.findByIdAndDelete(studentId);
+}
+
+function deleteCourse(courseId) {
+  return db.Students.updateMany({}, {$pull : {students: {$in: [studentId]}}}, { multi: true });
 }
 
 module.exports = {
@@ -56,4 +39,5 @@ module.exports = {
   addCourseToStudent,
   deleteStudent,
   updateStudent,
+  deleteCourse,
 };

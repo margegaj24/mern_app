@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const cors = require("cors");
+const serverless = require("serverless-http");
 
 app.use(cors({ origin: "*", optionsSuccessStatus: 200 }));
 app.use(bodyParser.json());
@@ -14,7 +15,7 @@ app.post("/students", async (req, res) => {
     var newStudent = req.body;
     var createdStudent = await operations.Student.createNewStudent(newStudent);
     if (newStudent.courses.length > 0)
-      await operations.Course.addStudentToCourses(newStudent.courses, createdStudent._id)
+      await operations.Course.addStudentToCourses(newStudent.courses, createdStudent._id);
     res.status(200).json({ message: "New student successfully created" });
   } catch (error) {
     res.status(200).json({ error: error.message });
@@ -64,6 +65,7 @@ app.delete("/student/:id", async (req, res) => {
 app.delete("/course/:id", async (req, res) => {
   try {
     await operations.Course.deleteCourse(req.params.id);
+    await operations.Student.deleteCourse(req.params.id);
     res.status(200).json({ message: "Successfully deleted" });
   } catch (error) {
     res.status(200).json({ error: error.message });
@@ -122,8 +124,10 @@ app.post("/addCourseToStudent", async (req, res) => {
 
 app.get("/", (req, res) => res.status(200).json({ message: "Hello world" }));
 
-const port = 5000;
+module.exports.handler = serverless(app);
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
-});
+// const port = 5000;
+
+// app.listen(port, () => {
+//   console.log(`Example app listening at http://localhost:${port}`);
+// });
