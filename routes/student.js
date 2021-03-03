@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const operations = require("../db-operations");
+const studentController = require("../controllers/student");
 
-router.get("/", operations.Student.getAllStudents);
-router.get("/:id", operations.Student.getStudent);
-router.post("/", operations.Student.createNewStudent);
-router.post("/addStudentToCourse/", operations.Student.addStudentToCourse);
-router.put("/:id", operations.Student.updateStudent);
-router.delete("/:id", operations.Student.deleteStudent);
+router.get("/", studentController.getAllStudents);
+router.get("/:id", studentController.getStudent);
+router.post("/", studentController.createNewStudent);
+router.post("/addStudentToCourse/", studentController.addStudentToCourse);
+router.put("/:id", studentController.updateStudent);
+router.delete("/:id", studentController.deleteStudent);
 
 module.exports = router;
