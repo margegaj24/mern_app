@@ -1,4 +1,4 @@
-const operations = require("./db-operations/operations.js");
+const operations = require("../db-operations/operations");
 
 module.exports = {
   getAllCourses: async (req, res) => {
