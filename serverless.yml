@@ -2,19 +2,13 @@ service: express-app
 
 provider:
   name: aws
-
   runtime: nodejs14.x
-
   stage: dev
-
   region: eu-west-2
 
 functions:
-  app:
-    handler: lambdas/endpoints/app.handler
+  server:
+    handler: server.handler
 
     events:
-      - http:
-          path: app/{ID}
-          method: GET
-          cors: true
+      - http: ANY /
