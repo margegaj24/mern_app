@@ -11,4 +11,15 @@ functions:
     handler: server.handler
 
     events:
-      - http: ANY /
+      - http:
+          path: /
+          method: ANY
+          cors: false
+      - http:
+          path: /students
+          method: ANY
+          cors: false
+      - http:
+          path: /courses
+          method: ANY
+          cors: false
