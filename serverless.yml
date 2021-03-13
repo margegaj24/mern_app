@@ -7,19 +7,9 @@ provider:
   region: eu-west-2
 
 functions:
-  server:
-    handler: server.handler
-
+  getStudents:
+    handler: ./lambdas/Student/getStudents.handler
     events:
       - http:
-          path: /
-          method: ANY
-          cors: true
-      - http:
           path: /students
-          method: ANY
-          cors: true
-      - http:
-          path: /courses
-          method: ANY
-          cors: true
+          method: GET
