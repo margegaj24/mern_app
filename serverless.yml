@@ -7,9 +7,22 @@ provider:
   region: eu-west-2
 
 functions:
+  server:
+    handler: server.handler
+    events:
+      - http: ANY /
+
   getStudents:
-    handler: ./lambdas/Student/getStudents.handler
+    handler: lambdas/Student/getStudents.handler
+    timeout: 10
     events:
       - http:
           path: /students
+          method: GET
+  getCourses:
+    handler: getCourses.handler
+    timeout: 10
+    events:
+      - http:
+          path: /courses
           method: GET
