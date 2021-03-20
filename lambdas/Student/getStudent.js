@@ -1,10 +1,9 @@
-const db = require("./models");
-const { connectToMongoose } = require("./db");
+const db = require("../../models");
+const { connectToMongoose } = require("../../db");
 
-module.exports = {
-  handler: async () => {
+module.exports.handler = async (event) => {
     connectToMongoose();
-    var data = await db.Student.find({});
+    var data = await db.Student.findById(event.params.id);
     console.log(data);
     return {
       statusCode: 200,
