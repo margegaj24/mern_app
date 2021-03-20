@@ -7,22 +7,63 @@ provider:
   region: eu-west-2
 
 functions:
-  server:
-    handler: server.handler
-    events:
-      - http: ANY /
-
   getStudents:
     handler: lambdas/Student/getStudents.handler
-    timeout: 10
     events:
       - http:
           path: /students
           method: GET
+  getStudent:
+    handler: lambdas/Student/getStudent.handler
+    events:
+      - http:
+          path: /students/{id}
+          method: GET
+  createStudent:
+    handler: lambdas/Student/createStudent.handler
+    events:
+      - http:
+          path: /students
+          method: POST
+  deleteStudent:
+    handler: lambdas/Student/deleteStudent.handler
+    events:
+      - http:
+          path: /students/{id}
+          method: DELETE
+  updateStudent:
+    handler: lambdas/Student/updateStudent.handler
+    events:
+      - http:
+          path: /students/{id}
+          method: PUT
   getCourses:
-    handler: getCourses.handler
-    timeout: 10
+    handler: lambdas/Course/getCourses.handler
     events:
       - http:
           path: /courses
           method: GET
+  getCourse:
+    handler: lambdas/Course/getCourse.handler
+    events:
+      - http:
+          path: /courses/{id}
+          method: GET
+  createCourse:
+    handler: lambdas/Course/createCourse.handler
+    events:
+      - http:
+          path: /courses
+          method: POST
+  deleteCourse:
+    handler: lambdas/Course/deleteCourse.handler
+    events:
+      - http:
+          path: /courses/{id}
+          method: DELETE
+  updateCourse:
+    handler: lambdas/Course/updateCourse.handler
+    events:
+      - http:
+          path: /courses/{id}
+          method: PUT
