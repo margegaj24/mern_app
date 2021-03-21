@@ -13,6 +13,8 @@ functions:
       - http:
           path: /students
           method: GET
+          authorizer:
+            arn: arn:aws:cognito-idp:eu-west-2:875637363269:userpool/eu-west-2_bxKeIFDCM
   getStudent:
     handler: lambdas/Student/getStudent.handler
     events:

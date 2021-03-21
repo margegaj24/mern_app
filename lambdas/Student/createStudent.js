@@ -3,7 +3,7 @@ const { connectToMongoose } = require("../../db");
 
 module.exports.handler = async (event) => {
   connectToMongoose();
-  var data = await models.Student.create(event.body);
+  var data = await models.Student.create(JSON.parse(event.body));
   return {
     statusCode: 200,
     body: JSON.stringify(data),
